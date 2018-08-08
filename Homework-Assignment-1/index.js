@@ -17,15 +17,18 @@ const httpServer = http.createServer((req, res) => {
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');  // Trims off the slashes from both sides
                                                             // (Helps us to handle requests to /foo and /foo/ equally.)
 
+  // Get the query string as an object
+  const queryStringObject = parsedURL.query;
+
   // Get the HTTP method
   const method = req.method.toUpperCase();
   
   // Send the response
   res.end(`Hello World!\n`);
 
-  // Log the request path
+  // Log the request method, path, and query string parameters
   console.log(`A ${method} request was received on path: ${trimmedPath}`);
-
+  console.log(`with query string parameters: `, queryStringObject);
 });
 
 
