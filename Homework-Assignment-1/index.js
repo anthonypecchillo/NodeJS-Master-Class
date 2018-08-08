@@ -5,6 +5,7 @@
 // Dependencies
 const http = require('http');
 const url = require('url');
+const { StringDecoder } = require('string_decoder');
 
 // The HTTP server should respond to all requests with a string
 const httpServer = http.createServer((req, res) => {
@@ -25,14 +26,23 @@ const httpServer = http.createServer((req, res) => {
 
   // Get the headers as an object
   const headers = req.headers;
-  
-  // Send the response
-  res.end(`Hello World!\n`);
 
-  // Log the request method, path, and query string parameters
-  console.log(`A ${method} request was received on path: ${trimmedPath}`);
-  console.log(`with query string parameters: `, queryStringObject);
-  console.log(`and the following headers: `, headers);
+  // Get payload, if any exists
+  const decoder = new StringDecoder('utf-8');
+  let buffer = '';
+
+  req.on('data', data => buffer += decoder.write(data));
+  
+  req.on('end', () => {
+    buffer += decoder.end()
+
+    // Send the response
+    res.end(`Hello World!\n`);
+
+    // Log the request payload
+    console.log(`Request recieved with this payload: ${buffer}`);
+  });
+
 });
 
 
