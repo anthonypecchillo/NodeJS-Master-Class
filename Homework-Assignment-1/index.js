@@ -10,12 +10,11 @@ const { StringDecoder } = require('string_decoder');
 const config = require('./config');
 const fs = require('fs');
 
-
 // Instantiate the HTTP server
 const httpServer = http.createServer((req, res) => unifiedServer(req, res));
 
 // Start the HTTP server
-httpServer.listen(config.port, () => console.log(`The HTTP server is listening on port ${config.httpPort} in ${config.envName} mode...`));
+httpServer.listen(config.httpPort, () => console.log(`The HTTP server is listening on port ${config.httpPort} in ${config.envName} mode...`));
 
 
 // Instantiate the HTTPS server
@@ -27,7 +26,7 @@ const httpsServerOptions = {
 const httpsServer = https.createServer(httpsServerOptions, (req, res) => unifiedServer(req, res));
 
 // Start the HTTPS server
-httpsServer.listen(config.port, () => console.log(`The HTTPS server is listening on port ${config.httpsPort} in ${config.envName} mode...`));
+httpsServer.listen(config.httpsPort, () => console.log(`The HTTPS server is listening on port ${config.httpsPort} in ${config.envName} mode...`));
 
 
 // All the server logic for both the HTTP and HTTPS server
@@ -94,13 +93,11 @@ const unifiedServer = (req, res) => {
 };
 
 
-
-
 // Define the handlers
 let handlers = {};
 
 // Hello handler
-handlers.hello = (data, callback) => callback(200);
+handlers.hello = (data, callback) => callback(200, {'message': 'Hello World!'});
 
 // Not found handler
 handlers.notFound = (data, callback) => callback(404); 
